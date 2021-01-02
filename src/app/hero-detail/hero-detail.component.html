@@ -1,9 +1,21 @@
 <div *ngIf="hero">
-    <h2>{{hero.name | uppercase}} Details</h2>
-    <div><span>id: </span>{{hero.id}}</div>
-    <div>
-      <label>name:
-        <input [(ngModel)]="hero.name" placeholder="name" />
-      </label>
-    </div>
+  <h2>{{hero.name | uppercase}} Details</h2>
+  <div><span>id: </span>{{hero.id}}</div>
+  <div>
+    <label>name:
+      <input [(ngModel)]="hero.name" placeholder="name" />
+    </label>
   </div>
+
+  <div>
+    <div>Show more details</div>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="isMoreDetailActive">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <app-hero-more-detail *ngIf="isMoreDetailActive" [my-hero]="hero"></app-hero-more-detail>
+
+  <button (click)="goBack()">go back</button>
+</div>
