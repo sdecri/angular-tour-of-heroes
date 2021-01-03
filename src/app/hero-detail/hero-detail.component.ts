@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { Hero } from '../hero';
+import { Hero, ELEMENT } from '../hero';
 import { HeroService } from '../hero.service';
 import { MessageService } from '../message.service';
+import { HelperService } from '../helper.service';
 
 @Component({
   selector: 'app-hero-detail',
@@ -13,20 +14,39 @@ import { MessageService } from '../message.service';
 })
 export class HeroDetailComponent implements OnInit {
 
-  public hero?: Hero;
+  public elements: { [key: number]: string; }  = [];
+  public selectedElementKey: number = 0;
+
+  public hero: Hero = {
+    id: 0
+    , name: "none"
+    , element: ELEMENT.FIRE
+  };
   public isMoreDetailActive: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private heroService: HeroService,
     private messageService: MessageService,
+    private helperService: HelperService,
     private location: Location
     ) { }
 
   ngOnInit(): void {
     this.getHero();
+    // console.log(Object.entries(ELEMENT));
+    this.elements = {};
+    Object.entries(ELEMENT)
+    .filter(item => this.helperService.StringIsNumber(item[0]))
+    .map(item => {
+      const index: number = +item[0];
+      this.elements[index] = ""+item[1];
+    })
+    ;
+
   }
 
+  
   private getHero(){
     const idObject: any = this.route.snapshot.paramMap.get("id");
     if(idObject !== null){
@@ -45,8 +65,18 @@ export class HeroDetailComponent implements OnInit {
     
   }
 
+  public onChangeElement(){
+    // const element: ELEMENT = ELEMENT[this.selectedElement];
+  }
+
   public goBack(){
     this.location.back();
+  }
+
+  public save(){
+    this.heroService.updateHero(this.hero)
+    .subscribe(() => this.goBack())
+    ;
   }
 
 }

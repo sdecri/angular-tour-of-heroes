@@ -6,6 +6,15 @@
       <input [(ngModel)]="hero.name" placeholder="name" />
     </label>
   </div>
+  <div>
+    <label>element:
+      <select (change)="onChangeElement()">
+        <option *ngFor="let element of elements | keyvalue" [ngValue]="element.key">
+          {{ element.value }}
+        </option>
+      </select>
+    </label>
+  </div>
 
   <div>
     <div>Show more details</div>
@@ -16,6 +25,7 @@
   </div>
 
   <app-hero-more-detail *ngIf="isMoreDetailActive" [my-hero]="hero"></app-hero-more-detail>
-
+  
+  <button (click)="save()">save</button>
   <button (click)="goBack()">go back</button>
 </div>
