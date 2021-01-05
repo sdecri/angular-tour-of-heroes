@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Hero } from '../hero';
+import { ELEMENT, Hero } from '../hero';
 import { HeroService } from '../hero.service';
 import { MessageService } from '../message.service';
 
@@ -10,20 +10,42 @@ import { MessageService } from '../message.service';
 })
 export class HeroesComponent implements OnInit {
 
-  public heroes: Hero[] | undefined;
+  public heroes: Hero[] = [];
+  public newHero: Hero = this.createDefaultNewHero();
   public selectedHero: Hero | undefined;
 
-  constructor(private  heroService: HeroService) { 
-    
+  constructor(private heroService: HeroService) {
+
   }
 
   ngOnInit(): void {
     this.getHeroes();
   }
 
-  private getHeroes(): void{
+  private createDefaultNewHero(): Hero{
+    return {name: '', element: ELEMENT.FIRE} as Hero;
+  }
+
+  private getHeroes(): void {
     this.heroService.getHeroes()
-    .subscribe(returnedHeroes => this.heroes = returnedHeroes);
+      .subscribe(returnedHeroes => this.heroes = returnedHeroes);
+  }
+
+  public addCallback(): void {
+    this.newHero.name = this.newHero.name.trim();
+    if (!this.newHero.name) { return; }
+    this.heroService.addHero(this.newHero)
+      .subscribe(hero => {
+        this.heroes.push(hero);
+        this.newHero = this.createDefaultNewHero();
+      });
+  }
+
+  
+  public delete(hero: Hero): void {
+    this.heroService.deleteHero(hero).subscribe(() => {
+      this.heroes = this.heroes.filter(h => h !== hero);
+    });
   }
 
   // onSelect = (hero: Hero) => {

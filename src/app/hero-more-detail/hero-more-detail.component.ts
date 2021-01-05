@@ -9,6 +9,8 @@ import { Hero, ELEMENT } from '../hero';
 })
 export class HeroMoreDetailComponent implements OnInit {
 
+  public ELEMENT = ELEMENT;
+
   @Input("my-hero") public myHero?: Hero;
 
   constructor() { }

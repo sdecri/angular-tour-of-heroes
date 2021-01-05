@@ -1,20 +1,7 @@
 <div *ngIf="hero">
   <h2>{{hero.name | uppercase}} Details</h2>
   <div><span>id: </span>{{hero.id}}</div>
-  <div>
-    <label>name:
-      <input [(ngModel)]="hero.name" placeholder="name" />
-    </label>
-  </div>
-  <div>
-    <label>element:
-      <select (change)="onChangeElement()">
-        <option *ngFor="let element of elements | keyvalue" [ngValue]="element.key">
-          {{ element.value }}
-        </option>
-      </select>
-    </label>
-  </div>
+  <app-hero-editor [hero]="hero"></app-hero-editor>
 
   <div>
     <div>Show more details</div>

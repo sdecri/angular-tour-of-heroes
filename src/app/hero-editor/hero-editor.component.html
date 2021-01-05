@@ -1,0 +1,15 @@
+<div>
+    <label>name:
+        <input [(ngModel)]="hero.name" placeholder="name" />
+    </label>
+</div>
+<div>
+    <label>element:
+        <!-- (change)="onChangeElement()"  -->
+        <select [(ngModel)]='hero.element'>
+            <option *ngFor="let element of elements | keyvalue" [value]="element.key">
+                {{ element.value }}
+            </option>
+        </select>
+    </label>
+</div>

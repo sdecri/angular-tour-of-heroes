@@ -14,8 +14,8 @@ import { HelperService } from '../helper.service';
 })
 export class HeroDetailComponent implements OnInit {
 
-  public elements: { [key: number]: string; }  = [];
-  public selectedElementKey: number = 0;
+  public isLoading: boolean = true;
+  // public selectedElementKey: number = 0;
 
   public hero: Hero = {
     id: 0
@@ -30,53 +30,46 @@ export class HeroDetailComponent implements OnInit {
     private messageService: MessageService,
     private helperService: HelperService,
     private location: Location
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.getHero();
     // console.log(Object.entries(ELEMENT));
-    this.elements = {};
-    Object.entries(ELEMENT)
-    .filter(item => this.helperService.StringIsNumber(item[0]))
-    .map(item => {
-      const index: number = +item[0];
-      this.elements[index] = ""+item[1];
-    })
-    ;
-
   }
 
-  
-  private getHero(){
+
+  private getHero() {
     const idObject: any = this.route.snapshot.paramMap.get("id");
-    if(idObject !== null){
+    if (idObject !== null) {
       const id: number = +idObject;
       this.heroService.getHero(id)
-      .subscribe(returnedHero => {
-        if(returnedHero){
-          this.hero = returnedHero;
-        }else {
-          this.messageService.add(`Hero with id ${id} not found!`);
-        }
-      });
+        .subscribe(returnedHero => {
+          if (returnedHero) {
+            this.hero = returnedHero;
+          } else {
+            this.messageService.add(`Hero with id ${id} not found!`);
+          }
+        });
     } else {
       this.messageService.add(`Hero id ${idObject} not found in url!`);
     }
-    
+
   }
 
-  public onChangeElement(){
-    // const element: ELEMENT = ELEMENT[this.selectedElement];
-  }
+  // public onChangeElement() {
+  //   const elementKey: string = ELEMENT[this.selectedElementKey];
+  //   this.hero.element = ELEMENT[elementKey as keyof typeof ELEMENT];
+  // }
 
-  public goBack(){
+  public goBack() {
     this.location.back();
   }
 
-  public save(){
+  public save() {
+    console.debug(this.hero);
     this.heroService.updateHero(this.hero)
-    .subscribe(() => this.goBack())
-    ;
+      .subscribe(() => this.goBack())
+      ;
   }
 
 }
